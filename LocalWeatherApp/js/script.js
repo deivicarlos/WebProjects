@@ -4,6 +4,7 @@ var DarkSkyRequest = "https://api.darksky.net/forecast/" + DarkSkyKey + "/";
 //google api key AIzaSyDQV1m-AHKnntgP3s8jcvZMNCbbyawyeEw
 //https://maps.googleapis.com/maps/api/js?key=AIzaSyDQV1m-AHKnntgP3s8jcvZMNCbbyawyeEw&callback=initMap
 var geocoder;
+
 var currentLocation = {
   longitude: "",
   latitude: "",
@@ -18,6 +19,23 @@ $(document).ready(function(){
   $("#btnGetLocation").click(tempAxio);
                   });
 
+
+
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(savePosition);
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+function savePosition(position) {
+    currentLocation.latitude = position.coords.latitude;
+    currentLocation.longitude = position.coords.longitude; 
+
+    $("#location").html("Latitude: " + currentLocation.latitude + " Longitude: " + currentLocation.longitude + " Ciudad: "+ currentLocation.city + " Pais: " );
+}
 
 //http://maps.googleapis.com/maps/api/geocode/json?latlng=33.7532358,-117.7901088&sensor=false
 
@@ -41,7 +59,7 @@ $(document).ready(function(){
 }
 */
 
-function getGeoLocation(){
+/*function getGeoLocation(){
   geocoder = new google.maps.Geocoder();
   
   if(navigator.geolocation){
@@ -55,7 +73,7 @@ function getGeoLocation(){
     " Longitude: " + position.coords.longitude) 
 }
 }
-
+*/
 
 
 
@@ -75,7 +93,7 @@ function geoError(){
  // alert("Geo location failed");
 }
 
-function codeLatLng(lat, lng) {
+/*function codeLatLng(lat, lng) {
 
     var latlng = new google.maps.LatLng(lat, lng);
     geocoder.geocode({'latLng': latlng}, function(results, status) {
@@ -88,7 +106,7 @@ function codeLatLng(lat, lng) {
         alert("Geocoder failed due to: " + status);
       }
     });
-}
+}*/
 
 function getTemperature(){
   var URL = DarkSkyRequest + currentLocation.latitude + "," + currentLocation.longitude;
