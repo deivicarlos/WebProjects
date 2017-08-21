@@ -15,6 +15,9 @@ var currentLocation = {
   temperature: 0
 }
 
+
+
+
 $(document).ready(function(){
   
     geocoder = new google.maps.Geocoder();
@@ -28,6 +31,20 @@ $(document).ready(function(){
   
 });
 
+
+
+function setCurrentLocation(){
+
+}
+
+function setLngLat(position){
+
+  currentLocation.lat = position.coords.latitude;
+  currentLocation.lng = position.coords.longitude;
+
+  getCityName();
+
+}
 //http://maps.googleapis.com/maps/api/geocode/json?latlng=33.7532358,-117.7901088&sensor=false
 function updateLocation(){
   
@@ -42,11 +59,9 @@ function updateLocation(){
 function getCityName(){
 
   var latitudeLongitude = currentLocation.lat + "," + currentLocation.lng;
-
+  console.log(latitudeLongitude);
   if(latitudeLongitude){
-    alert(latitudeLongitude);
-    alert(mapsUrl);
-  
+    
     $.getJSON( mapsUrl, {
     latlng: latitudeLongitude
     //key: googeApiKey  
@@ -54,12 +69,12 @@ function getCityName(){
     function(results){
       var result = results.results[3].formatted_address;
       var fields = result.split(",");
-      currentLocation.city = fields[0] + ", " + fields[1];
-      currentLocation.country = fields[2];
+      currentLocation.city = fields[0];
+      currentLocation.country = fields[1];
 
-      console.log(currentLocation.city);
-      console.log(currentLocation.country);
-
+      //alert(fields[0] + ", " + fields[1] + " - " + fields[2])
+      $("#location").html(currentLocation.city + " " + currentLocation.country);
+      getTemperature();
     });
   }
 }
@@ -70,36 +85,40 @@ function getTemperature(){
   var requestUrl = DarkSkyRequest + currentLocation.lat + "," + currentLocation.lng;
   console.log(requestUrl);
 
+  /*$.getJSON(requestUrl, function(results){
+      currentLocation.temperature = results.currently.temperature;
+  });*/
+
   $.ajax({
         url: requestUrl,
         type: 'GET',
         cache: false,
-        dataType: 'json', // added data type
+        dataType: 'jsonp', // added data type
         
         success: function(json) {
           currentLocation.temperature = json.currently.temperature;
           $("#weatherTemp").html(currentLocation.temperature);
         }
       
-  });
+  })
   
 }
 
 function getLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(savePosition);
-        getCityName();
+        navigator.geolocation.getCurrentPosition(setLngLat);
+        
     } else {
         alert("Geolocation is not supported by this browser.");
     }
 }
 
-function savePosition(position) {
+/*function savePosition(position) {
 
   currentLocation.lat = position.coords.latitude;
   currentLocation.lng = position.coords.longitude;
   
   $("#location").html("Latitude: " + currentLocation.lat + " Longitude: " + currentLocation.lng + " Ciudad: "+ currentLocation.city + " Pais: " );
 }
-
+*/
 
