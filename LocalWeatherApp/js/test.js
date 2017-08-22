@@ -12,23 +12,28 @@ var currentLocation = {
   lat: "",
   country: "",
   city: "",
-  temperature: 0
+  temperatureF: 0,
+  temperatureC: 0,
+  isCelcius: false
 }
 
 
 
 
+    
 $(document).ready(function(){
   
     geocoder = new google.maps.Geocoder();
     getLocation();
     
 
-    $("#btnGetLocation").click( function() {
-    //  getCityName();
-      //updateLocation(); 
-    });
-  
+    $("#weatherTemp").click(updateTemperature);
+/*
+    $("#weatherTemp").on("click", function() {
+      updateTemperature();
+    });*/
+
+    
 });
 
 
@@ -50,7 +55,7 @@ function updateLocation(){
   
   //$("#location").html("Hello World!");
   if(currentLocation.city){
-    $("#location").html(currentLocation.city + " " + currentLocation.country);
+    $("#location").html(currentLocation.city + ", " + currentLocation.country);
 
   }
   //$("#weatherTemp").html(currentLocation.temperature);
@@ -59,7 +64,7 @@ function updateLocation(){
 function getCityName(){
 
   var latitudeLongitude = currentLocation.lat + "," + currentLocation.lng;
-  console.log(latitudeLongitude);
+  
   if(latitudeLongitude){
     
     $.getJSON( mapsUrl, {
@@ -73,7 +78,7 @@ function getCityName(){
       currentLocation.country = fields[1];
 
       //alert(fields[0] + ", " + fields[1] + " - " + fields[2])
-      $("#location").html(currentLocation.city + " " + currentLocation.country);
+      $("#location").html(currentLocation.city + ", " + currentLocation.country);
       getTemperature();
     });
   }
@@ -83,8 +88,7 @@ function getCityName(){
 function getTemperature(){
   
   var requestUrl = DarkSkyRequest + currentLocation.lat + "," + currentLocation.lng;
-  console.log(requestUrl);
-
+  
   /*$.getJSON(requestUrl, function(results){
       currentLocation.temperature = results.currently.temperature;
   });*/
@@ -96,12 +100,31 @@ function getTemperature(){
         dataType: 'jsonp', // added data type
         
         success: function(json) {
-          currentLocation.temperature = json.currently.temperature;
-          $("#weatherTemp").html(currentLocation.temperature);
+          currentLocation.temperatureF = json.currently.temperature.toFixed(1);
+          currentLocation.temperatureC = ((currentLocation.temperatureF - 32)/1.8).toFixed(1);
+          updateTemperature();
         }
       
   })
   
+}
+
+function updateTemperature(){
+
+  var str = "";
+  
+  if(currentLocation.isCelcius){
+      
+      str = currentLocation.temperatureF + " &#176;F";
+      $("#weatherTemp").html(str);
+      currentLocation.isCelcius = false;
+      return;
+  }
+
+  str = currentLocation.temperatureC + " &#176;C";
+  $("#weatherTemp").html(str);
+  currentLocation.isCelcius = true;
+
 }
 
 function getLocation() {
