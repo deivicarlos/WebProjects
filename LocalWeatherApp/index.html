@@ -2,19 +2,22 @@
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/weather-icons.css">
   <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
-	<div id="mainContainer" class="mainContainer">
+  <div id="mainContainer" class="mainContainer">
   <h1 class="title"> Local Weather App</h1>
   <div class="weatherContainer">
-    <div id="weatherIcon" class="weatherIcon">weather icon</div>
-    <div id="weatherTemp" class="weatherTemp"></div>
+    <div id="weatherIconContainer" class="">
+      <i id="weatherIcon" class=""></i>
+    </div>
+    <div id="weatherTempContainer" class="weatherTemp">
+      <i id="weatherTemp"></i>
+    </div>
     <p id="location" class="location"></p>
-    <p id="measurement" class="measurement">measurement</p>
-    <button id="btnGetLocation" type="button" class="">GetLocation</button>
   </div>
-  <p id="signature" class="text-center">by Carlos Garcia</p>
+  <p id="signature" class="text-center">by <span class="signatureName">Carlos Garcia</span></p>
 </div>
   <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
   <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>

@@ -14,7 +14,8 @@ var currentLocation = {
   city: "",
   temperatureF: 0,
   temperatureC: 0,
-  isCelcius: false
+  isCelcius: false,
+  icon: ""
 }
 
 
@@ -88,7 +89,7 @@ function getCityName(){
 function getTemperature(){
   
   var requestUrl = DarkSkyRequest + currentLocation.lat + "," + currentLocation.lng;
-  
+  console.log(requestUrl);
   /*$.getJSON(requestUrl, function(results){
       currentLocation.temperature = results.currently.temperature;
   });*/
@@ -102,7 +103,9 @@ function getTemperature(){
         success: function(json) {
           currentLocation.temperatureF = json.currently.temperature.toFixed(1);
           currentLocation.temperatureC = ((currentLocation.temperatureF - 32)/1.8).toFixed(1);
+          
           updateTemperature();
+          setWeatherIcon(json.currently.icon);
         }
       
   })
@@ -136,12 +139,54 @@ function getLocation() {
     }
 }
 
-/*function savePosition(position) {
+function setWeatherIcon(ex){
 
-  currentLocation.lat = position.coords.latitude;
-  currentLocation.lng = position.coords.longitude;
-  
-  $("#location").html("Latitude: " + currentLocation.lat + " Longitude: " + currentLocation.lng + " Ciudad: "+ currentLocation.city + " Pais: " );
+  switch(ex){
+    case "clear-day":
+      $("#weatherIcon").addClass("wi wi-day-sunny");
+      break;
+
+    case "clear-night":
+      $("#weatherIcon").addClass("wi wi-night-clear");
+      break;
+
+     case "rain":
+      $("#weatherIcon").addClass("wi wi-rain");
+      break;
+
+    case "snow":
+      $("#weatherIcon").addClass("wi wi-snow");
+      break;
+
+    case "sleet":
+      $("#weatherIcon").addClass("wi wi-sleet");
+      break;
+
+    case "wind":
+      $("#weatherIcon").addClass("wi wi-windy");
+      break;
+
+    case "fog":
+      $("#weatherIcon").addClass("wi wi-fog");
+      break;
+
+    case "cloudy":
+      $("#weatherIcon").addClass("wi wi-cloudy");
+      break;
+
+    case "partly-cloudy-day":
+      $("#weatherIcon").addClass("wi wi-day-cloudy");
+      break;
+
+    case "partly-cloudy-night":
+      $("#weatherIcon").addClass("wi wi-night-alt-cloudy");
+      break;
+
+    default:
+      $("#weatherIcon").addClass("wi wi-day-cloudy");
+      break;
+  }
+  $("#weatherIcon").addClass("wi-fw");
 }
-*/
+
 
