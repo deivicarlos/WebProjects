@@ -18,30 +18,17 @@ var currentLocation = {
   icon: ""
 }
 
-
-
-
     
 $(document).ready(function(){
   
     geocoder = new google.maps.Geocoder();
     getLocation();
     
-
+    writeMainPage();
     $("#weatherTemp").click(updateTemperature);
-/*
-    $("#weatherTemp").on("click", function() {
-      updateTemperature();
-    });*/
 
-    
 });
 
-
-
-function setCurrentLocation(){
-
-}
 
 function setLngLat(position){
 
@@ -51,16 +38,7 @@ function setLngLat(position){
   getCityName();
 
 }
-//http://maps.googleapis.com/maps/api/geocode/json?latlng=33.7532358,-117.7901088&sensor=false
-function updateLocation(){
-  
-  //$("#location").html("Hello World!");
-  if(currentLocation.city){
-    $("#location").html(currentLocation.city + ", " + currentLocation.country);
 
-  }
-  //$("#weatherTemp").html(currentLocation.temperature);
-}
 
 function getCityName(){
 
@@ -75,11 +53,15 @@ function getCityName(){
     function(results){
       var result = results.results[3].formatted_address;
       var fields = result.split(",");
+      var str = "";
+
       currentLocation.city = fields[0];
       currentLocation.country = fields[1];
 
       //alert(fields[0] + ", " + fields[1] + " - " + fields[2])
-      $("#location").html(currentLocation.city + ", " + currentLocation.country);
+      //$("#location").html(currentLocation.city + ", " + currentLocation.country);
+      str = currentLocation.city + ", " + currentLocation.country;
+      writeHtml("#location", str);
       getTemperature();
     });
   }
@@ -89,10 +71,6 @@ function getCityName(){
 function getTemperature(){
   
   var requestUrl = DarkSkyRequest + currentLocation.lat + "," + currentLocation.lng;
-  console.log(requestUrl);
-  /*$.getJSON(requestUrl, function(results){
-      currentLocation.temperature = results.currently.temperature;
-  });*/
 
   $.ajax({
         url: requestUrl,
@@ -119,13 +97,15 @@ function updateTemperature(){
   if(currentLocation.isCelcius){
       
       str = currentLocation.temperatureF + " &#176;F";
-      $("#weatherTemp").html(str);
+      //$("#weatherTemp").html(str);
+      writeHtml("#weatherTemp", str);
       currentLocation.isCelcius = false;
       return;
   }
 
   str = currentLocation.temperatureC + " &#176;C";
-  $("#weatherTemp").html(str);
+  //$("#weatherTemp").html(str);
+  writeHtml("#weatherTemp", str);
   currentLocation.isCelcius = true;
 
 }
@@ -143,6 +123,7 @@ function setWeatherIcon(ex){
 
   switch(ex){
     case "clear-day":
+      //setHtmlClass("#weatherIcon", "wi wi-day-sunny");
       $("#weatherIcon").addClass("wi wi-day-sunny");
       break;
 
@@ -186,7 +167,69 @@ function setWeatherIcon(ex){
       $("#weatherIcon").addClass("wi wi-day-cloudy");
       break;
   }
-  $("#weatherIcon").addClass("wi-fw");
+
 }
 
+
+function writeHtml(id, str){
+
+  $(id).animate({
+          opacity: 0
+          }, 500, function(){
+            $(this).animate({
+              opacity: 1
+              }, 500);
+          $(id).html(str);
+  });
+}
+
+function setHtmlClass(id, str){
+
+  $(id).animate({
+      opacity: 0
+          }, 500, function(){
+            $(this).animate({
+              opacity: 1
+              }, 500);
+          $(id).addClass(str);
+  });
+}
+
+
+function clock() {// We create a new Date object and assign it to a variable called "time".
+
+var str = "";
+var time = new Date(),
+    
+    // Access the "getHours" method on the Date object with the dot accessor.
+    hours = time.getHours(),
+    
+    // Access the "getMinutes" method with the dot accessor.
+    minutes = time.getMinutes(),
+    
+    
+    seconds = time.getSeconds();
+
+
+str = "Current time: " + harold(hours) + ":" + harold(minutes) + ":" + harold(seconds);
+//console.log(str);
+//writeHtml("#clock", str);
+$("#clock").html(str);  
+
+  function harold(standIn) {
+    if (standIn < 10) {
+      standIn = '0' + standIn
+    }
+    return standIn;
+  }
+}
+setInterval(clock, 1000);
+
+function writeMainPage(){
+  writeHtml("#title", "Local Weather App");
+  writeHtml("#by", "by");
+  writeHtml("#signatureName", "Carlos Garcia");
+
+  
+}
 

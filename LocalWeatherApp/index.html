@@ -7,17 +7,16 @@
 </head>
 <body>
   <div id="mainContainer" class="mainContainer">
-  <h1 class="title"> Local Weather App</h1>
+  <h1 id="title" class="title"></h1>
   <div class="weatherContainer">
     <div id="weatherIconContainer" class="">
-      <i id="weatherIcon" class=""></i>
+      <i id="weatherIcon" class=""></i><br>
+      <a><i id="weatherTemp"></i></a>
     </div>
-    <div id="weatherTempContainer" class="weatherTemp">
-      <i id="weatherTemp"></i>
-    </div>
+    <p><span id="clock" class="clock"></span></p>
     <p id="location" class="location"></p>
   </div>
-  <p id="signature" class="text-center">by <span class="signatureName">Carlos Garcia</span></p>
+  <p id="signature" class="text-center"><span id="by"></span> <span id="signatureName" class="signatureName"></span></p>
 </div>
   <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
   <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
